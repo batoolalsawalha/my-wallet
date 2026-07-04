@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <!-- Background Gradient -->
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0d0b21" />
+      <stop offset="100%" stop-color="#191635" />
+    </linearGradient>
+    
+    <!-- Wallet Gradient -->
+    <linearGradient id="walletGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#8a2be2" />
+      <stop offset="100%" stop-color="#9d4edd" />
+    </linearGradient>
+
+    <!-- Accent Gradient -->
+    <linearGradient id="accentGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#00e676" />
+      <stop offset="100%" stop-color="#00b0ff" />
+    </linearGradient>
+
+    <!-- Shadow filter -->
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="10" stdDeviation="15" flood-color="#8a2be2" flood-opacity="0.5" />
+    </filter>
+  </defs>
+
+  <!-- Background Base -->
+  <rect width="512" height="512" rx="128" fill="url(#bgGrad)" />
+
+  <!-- Outer Glow Circle -->
+  <circle cx="256" cy="256" r="180" fill="none" stroke="url(#accentGrad)" stroke-width="4" stroke-dasharray="10 15" opacity="0.3" />
+
+  <!-- Wallet SVG Icon Group -->
+  <g filter="url(#glow)" transform="translate(128, 128)">
+    <!-- Wallet Back/Main Body -->
+    <rect x="0" y="24" width="256" height="192" rx="28" fill="url(#walletGrad)" />
+    
+    <!-- Wallet Front flap -->
+    <path d="M 120 24 L 256 24 L 256 128 L 120 128 Z" fill="#b388ff" opacity="0.15" />
+    
+    <!-- Wallet Flap/Strap -->
+    <path d="M 160 88 L 256 88 C 268 88, 268 152, 256 152 L 160 152 C 148 152, 148 88, 160 88 Z" fill="#7b2cbf" />
+    
+    <!-- Wallet Lock (Gold coin circle) -->
+    <circle cx="208" cy="120" r="16" fill="#ffd54f" />
+    <path d="M 204 112 L 212 112 M 208 112 L 208 128 M 204 120 L 212 120" stroke="#ffab00" stroke-width="2" stroke-linecap="round" />
+
+    <!-- Plus / Growth Arrow escaping from wallet -->
+    <path d="M 48 80 L 100 28 M 100 28 L 76 28 M 100 28 L 100 52" fill="none" stroke="url(#accentGrad)" stroke-width="12" stroke-linecap="round" stroke-linejoin="round" />
+    
+    <!-- Decorative Money lines inside the wallet -->
+    <rect x="36" y="8" width="80" height="16" rx="4" fill="#00e676" opacity="0.8" />
+    <rect x="52" y="-4" width="80" height="16" rx="4" fill="#00b0ff" opacity="0.6" />
+  </g>
+</svg>

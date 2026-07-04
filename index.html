@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#0d0b21">
+    <title>MyWallet - Personal Finance</title>
+    <!-- PWA Manifest & Icons -->
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" type="image/svg+xml" href="icon.svg">
+    <link rel="apple-touch-icon" href="icon.svg">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Main Style Sheet -->
+    <link rel="stylesheet" href="style.css">
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="background-decorations">
+        <div class="circle circle-1"></div>
+        <div class="circle circle-2"></div>
+        <div class="circle circle-3"></div>
+    </div>
+
+    <div class="container">
+        <!-- App Header -->
+        <header class="app-header">
+            <div class="logo-area">
+                <div class="logo-icon">
+                    <i class="fa-solid fa-wallet"></i>
+                </div>
+                <div>
+                    <h1>MyWallet</h1>
+                    <p>مساعدك المالي الشخصي بالدينار الأردني</p>
+                </div>
+            </div>
+            <div class="header-actions">
+                <span class="current-date" id="currentDate">-- / -- / ----</span>
+            </div>
+        </header>
+
+        <!-- Alert Notification Area -->
+        <div id="alertsContainer" class="alerts-container"></div>
+
+        <!-- Dashboard Summary Grid -->
+        <section class="summary-grid">
+            <!-- Current Balance Card -->
+            <div class="glass-card summary-card balance-card">
+                <div class="card-glow"></div>
+                <div class="card-icon">
+                    <i class="fa-solid fa-scale-balanced"></i>
+                </div>
+                <div class="card-content">
+                    <h3>الرصيد الحالي</h3>
+                    <div class="amount-display">
+                        <span id="currentBalance">0.00</span> <small>د.أ</small>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Total Expenses Card -->
+            <div class="glass-card summary-card expenses-card">
+                <div class="card-glow"></div>
+                <div class="card-icon">
+                    <i class="fa-solid fa-receipt"></i>
+                </div>
+                <div class="card-content">
+                    <h3>مصاريف هذا الشهر</h3>
+                    <div class="amount-display">
+                        <span id="totalMonthlyExpenses">0.00</span> <small>د.أ</small>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Monthly Budget Card -->
+            <div class="glass-card summary-card budget-card">
+                <div class="card-glow"></div>
+                <div class="card-icon">
+                    <i class="fa-solid fa-bullseye"></i>
+                </div>
+                <div class="card-content">
+                    <div class="budget-header">
+                        <h3>الميزانية الشهرية</h3>
+                        <button id="editBudgetBtn" class="edit-btn" title="تعديل الميزانية">
+                            <i class="fa-solid fa-pen-to-square"></i>
+                        </button>
+                    </div>
+                    <div class="amount-display">
+                        <span id="monthlyBudget">0.00</span> <small>د.أ</small>
+                    </div>
+                    <div class="budget-progress-container">
+                        <div class="progress-bar-bg">
+                            <div class="progress-bar-fill" id="budgetProgressBar" style="width: 0%"></div>
+                        </div>
+                        <div class="progress-info">
+                            <span id="budgetProgressPercent">0%</span>
+                            <span id="budgetProgressLabel">0 / 0 د.أ</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Budget Editing Modal (Hidden by default) -->
+        <div id="budgetModal" class="modal-overlay">
+            <div class="modal-content glass-card">
+                <div class="modal-header">
+                    <h2>تعديل الميزانية الشهرية</h2>
+                    <button class="close-modal-btn" id="closeBudgetModal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="newBudgetInput">الميزانية الجديدة بالدينار الأردني (د.أ)</label>
+                        <input type="number" id="newBudgetInput" min="0" step="0.5" placeholder="مثال: 500">
+                    </div>
+                    <button id="saveBudgetBtn" class="btn btn-primary">حفظ التغييرات</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content Area -->
+        <div class="main-content-layout">
+            <!-- Right Column: Add transaction & Statistics -->
+            <div class="content-col right-col">
+                <!-- Add Expense Form -->
+                <div class="glass-card form-card">
+                    <div class="card-header">
+                        <h2><i class="fa-solid fa-plus-minus"></i> إضافة مصروف أو دخل</h2>
+                    </div>
+                    <form id="transactionForm">
+                        <div class="form-row select-type-row">
+                            <label class="type-btn active" data-type="expense">
+                                <input type="radio" name="txType" value="expense" checked>
+                                <i class="fa-solid fa-arrow-down-long"></i> مصروف
+                            </label>
+                            <label class="type-btn" data-type="income">
+                                <input type="radio" name="txType" value="income">
+                                <i class="fa-solid fa-arrow-up-long"></i> دخل
+                            </label>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="amount"><i class="fa-solid fa-coins"></i> المبلغ (د.أ)</label>
+                            <input type="number" id="amount" step="0.01" min="0.01" required placeholder="0.00">
+                        </div>
+
+                        <div class="form-group" id="categoryGroup">
+                            <label for="category"><i class="fa-solid fa-tags"></i> التصنيف</label>
+                            <select id="category" required>
+                                <option value="" disabled selected>اختر التصنيف...</option>
+                                <option value="أكل">أكل</option>
+                                <option value="مواصلات">مواصلات</option>
+                                <option value="تسوق">تسوق</option>
+                                <option value="دراسة">دراسة</option>
+                                <option value="غيره">غيره</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="date"><i class="fa-regular fa-calendar-days"></i> التاريخ</label>
+                            <input type="date" id="date" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="note"><i class="fa-regular fa-comment-dots"></i> ملاحظة</label>
+                            <input type="text" id="note" placeholder="مثال: شراء بقالة، بنزين السيارة...">
+                        </div>
+
+                        <button type="submit" id="submitBtn" class="btn btn-primary btn-block">إضافة المعاملة</button>
+                        <button type="button" id="cancelEditBtn" class="btn btn-secondary btn-block" style="display: none; margin-top: 0.5rem;">إلغاء التعديل</button>
+                    </form>
+                </div>
+
+                <!-- Simple Statistics Panel -->
+                <div class="glass-card stats-card">
+                    <div class="card-header">
+                        <h2><i class="fa-solid fa-chart-simple"></i> إحصائيات سريعة</h2>
+                    </div>
+                    <div class="stats-content">
+                        <div class="top-spending-widget">
+                            <span>أكثر فئة صرفاً هذا الشهر:</span>
+                            <div class="top-category-badge" id="topCategoryDisplay">
+                                <span class="badge-icon"><i class="fa-solid fa-question"></i></span>
+                                <span class="badge-name">لا يوجد بيانات</span>
+                                <span class="badge-amount">0.00 د.أ</span>
+                            </div>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-label">مقارنة بميزانية الشهر:</span>
+                            <span class="stat-val" id="budgetUsageLabel">0% مستخدم</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-label">المتوسط اليومي للصرف:</span>
+                            <span class="stat-val" id="dailyAverageDisplay">0.00 د.أ / يوم</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Left Column: Chart & History -->
+            <div class="content-col left-col">
+                <!-- Visual Chart -->
+                <div class="glass-card chart-card">
+                    <div class="card-header">
+                        <h2><i class="fa-solid fa-chart-pie"></i> توزيع المصاريف للشهر الحالي</h2>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="expenseChart"></canvas>
+                        <div id="chartPlaceholder" class="chart-placeholder">
+                            <i class="fa-solid fa-chart-pie"></i>
+                            <p>أضف مصاريف هذا الشهر لعرض الرسم البياني التوضيحي</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Transaction History -->
+                <div class="glass-card history-card">
+                    <div class="card-header">
+                        <h2><i class="fa-solid fa-history"></i> سجل المعاملات</h2>
+                        <div class="history-filters">
+                            <select id="filterCategory">
+                                <option value="all">كل التصنيفات</option>
+                                <option value="أكل">أكل</option>
+                                <option value="مواصلات">مواصلات</option>
+                                <option value="تسوق">تسوق</option>
+                                <option value="دراسة">دراسة</option>
+                                <option value="غيره">غيره</option>
+                            </select>
+                            <select id="filterType">
+                                <option value="all">كل المعاملات</option>
+                                <option value="expense">مصاريف</option>
+                                <option value="income">دخل</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="history-list-container">
+                        <ul id="transactionList" class="transaction-list">
+                            <!-- JS will inject items here -->
+                        </ul>
+                        <div id="noTransactions" class="empty-state">
+                            <i class="fa-solid fa-receipt"></i>
+                            <p>لا يوجد أي معاملات مسجلة بعد. ابدأ بإضافة مصروف أو دخل!</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer & Tools -->
+        <footer class="app-footer">
+            <div class="data-actions">
+                <button id="exportDataBtn" class="btn btn-secondary btn-sm">
+                    <i class="fa-solid fa-file-export"></i> تصدير البيانات (JSON)
+                </button>
+                <label for="importFileInput" class="btn btn-secondary btn-sm custom-file-upload">
+                    <i class="fa-solid fa-file-import"></i> استيراد البيانات
+                </label>
+                <input type="file" id="importFileInput" accept=".json" style="display: none;">
+                <button id="clearDataBtn" class="btn btn-danger btn-sm">
+                    <i class="fa-solid fa-trash-can"></i> مسح البيانات
+                </button>
+            </div>
+            <p class="copyright">محفظتي &copy; 2026 - إدارة الأموال بكل سهولة وذكاء</p>
+        </footer>
+    </div>
+
+    <!-- Script File -->
+    <script src="app.js"></script>
+</body>
+</html>
