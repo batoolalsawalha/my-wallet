@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#0d0b21">
-    <title>MyWallet - Personal Finance</title>
+    <title data-i18n="title">MyWallet - Personal Finance</title>
     <!-- PWA Manifest & Icons -->
     <link rel="manifest" href="manifest.json">
     <link rel="icon" type="image/svg+xml" href="icon.svg">
@@ -36,10 +36,11 @@
                 </div>
                 <div>
                     <h1>MyWallet</h1>
-                    <p>مساعدك المالي الشخصي بالدينار الأردني</p>
+                    <p data-i18n="subTitle">مساعدك المالي الشخصي بالدينار الأردني</p>
                 </div>
             </div>
             <div class="header-actions">
+                <button id="langToggleBtn" class="btn btn-secondary btn-sm lang-toggle-btn">EN</button>
                 <span class="current-date" id="currentDate">-- / -- / ----</span>
             </div>
         </header>
@@ -56,9 +57,9 @@
                     <i class="fa-solid fa-scale-balanced"></i>
                 </div>
                 <div class="card-content">
-                    <h3>الرصيد الحالي</h3>
+                    <h3 data-i18n="balance">الرصيد الحالي</h3>
                     <div class="amount-display">
-                        <span id="currentBalance">0.00</span> <small>د.أ</small>
+                        <span id="currentBalance">0.00</span> <small data-i18n="currency">د.أ</small>
                     </div>
                 </div>
             </div>
@@ -70,9 +71,9 @@
                     <i class="fa-solid fa-receipt"></i>
                 </div>
                 <div class="card-content">
-                    <h3>مصاريف هذا الشهر</h3>
+                    <h3 data-i18n="monthlyExpenses">مصاريف هذا الشهر</h3>
                     <div class="amount-display">
-                        <span id="totalMonthlyExpenses">0.00</span> <small>د.أ</small>
+                        <span id="totalMonthlyExpenses">0.00</span> <small data-i18n="currency">د.أ</small>
                     </div>
                 </div>
             </div>
@@ -85,13 +86,13 @@
                 </div>
                 <div class="card-content">
                     <div class="budget-header">
-                        <h3>الميزانية الشهرية</h3>
+                        <h3 data-i18n="monthlyBudget">الميزانية الشهرية</h3>
                         <button id="editBudgetBtn" class="edit-btn" title="تعديل الميزانية">
                             <i class="fa-solid fa-pen-to-square"></i>
                         </button>
                     </div>
                     <div class="amount-display">
-                        <span id="monthlyBudget">0.00</span> <small>د.أ</small>
+                        <span id="monthlyBudget">0.00</span> <small data-i18n="currency">د.أ</small>
                     </div>
                     <div class="budget-progress-container">
                         <div class="progress-bar-bg">
@@ -106,19 +107,19 @@
             </div>
         </section>
 
-        <!-- Budget Editing Modal (Hidden by default) -->
+        <!-- Budget Editing Modal -->
         <div id="budgetModal" class="modal-overlay">
             <div class="modal-content glass-card">
                 <div class="modal-header">
-                    <h2>تعديل الميزانية الشهرية</h2>
+                    <h2 data-i18n="editBudgetTitle">تعديل الميزانية الشهرية</h2>
                     <button class="close-modal-btn" id="closeBudgetModal">&times;</button>
                 </div>
                 <div class="modal-body">
                     <div class="form-group">
-                        <label for="newBudgetInput">الميزانية الجديدة بالدينار الأردني (د.أ)</label>
-                        <input type="number" id="newBudgetInput" min="0" step="0.5" placeholder="مثال: 500">
+                        <label for="newBudgetInput" data-i18n="newBudgetLabel">الميزانية الجديدة بالدينار الأردني (د.أ)</label>
+                        <input type="number" id="newBudgetInput" min="0" step="0.5" placeholder="500">
                     </div>
-                    <button id="saveBudgetBtn" class="btn btn-primary">حفظ التغييرات</button>
+                    <button id="saveBudgetBtn" class="btn btn-primary" data-i18n="saveChanges">حفظ التغييرات</button>
                 </div>
             </div>
         </div>
@@ -130,72 +131,72 @@
                 <!-- Add Expense Form -->
                 <div class="glass-card form-card">
                     <div class="card-header">
-                        <h2><i class="fa-solid fa-plus-minus"></i> إضافة مصروف أو دخل</h2>
+                        <h2><i class="fa-solid fa-plus-minus"></i> <span data-i18n="addTransaction">إضافة مصروف أو دخل</span></h2>
                     </div>
                     <form id="transactionForm">
                         <div class="form-row select-type-row">
-                            <label class="type-btn active" data-type="expense">
+                            <label class="type-btn active" data-type="expense" id="labelExpense">
                                 <input type="radio" name="txType" value="expense" checked>
-                                <i class="fa-solid fa-arrow-down-long"></i> مصروف
+                                <i class="fa-solid fa-arrow-down-long"></i> <span data-i18n="expense">مصروف</span>
                             </label>
-                            <label class="type-btn" data-type="income">
+                            <label class="type-btn" data-type="income" id="labelIncome">
                                 <input type="radio" name="txType" value="income">
-                                <i class="fa-solid fa-arrow-up-long"></i> دخل
+                                <i class="fa-solid fa-arrow-up-long"></i> <span data-i18n="income">دخل</span>
                             </label>
                         </div>
 
                         <div class="form-group">
-                            <label for="amount"><i class="fa-solid fa-coins"></i> المبلغ (د.أ)</label>
+                            <label for="amount"><i class="fa-solid fa-coins"></i> <span data-i18n="amount">المبلغ (د.أ)</span></label>
                             <input type="number" id="amount" step="0.01" min="0.01" required placeholder="0.00">
                         </div>
 
                         <div class="form-group" id="categoryGroup">
-                            <label for="category"><i class="fa-solid fa-tags"></i> التصنيف</label>
+                            <label for="category"><i class="fa-solid fa-tags"></i> <span data-i18n="category">التصنيف</span></label>
                             <select id="category" required>
-                                <option value="" disabled selected>اختر التصنيف...</option>
-                                <option value="أكل">أكل</option>
-                                <option value="مواصلات">مواصلات</option>
-                                <option value="تسوق">تسوق</option>
-                                <option value="دراسة">دراسة</option>
-                                <option value="غيره">غيره</option>
+                                <option value="" disabled selected data-i18n="selectCategory">اختر التصنيف...</option>
+                                <option value="أكل" data-i18n="catFood">أكل</option>
+                                <option value="مواصلات" data-i18n="catTransport">مواصلات</option>
+                                <option value="تسوق" data-i18n="catShopping">تسوق</option>
+                                <option value="دراسة" data-i18n="catEducation">دراسة</option>
+                                <option value="غيره" data-i18n="catOthers">غيره</option>
                             </select>
                         </div>
 
                         <div class="form-group">
-                            <label for="date"><i class="fa-regular fa-calendar-days"></i> التاريخ</label>
+                            <label for="date"><i class="fa-regular fa-calendar-days"></i> <span data-i18n="date">التاريخ</span></label>
                             <input type="date" id="date" required>
                         </div>
 
                         <div class="form-group">
-                            <label for="note"><i class="fa-regular fa-comment-dots"></i> ملاحظة</label>
+                            <label for="note"><i class="fa-regular fa-comment-dots"></i> <span data-i18n="note">ملاحظة</span></label>
                             <input type="text" id="note" placeholder="مثال: شراء بقالة، بنزين السيارة...">
                         </div>
 
-                        <button type="submit" id="submitBtn" class="btn btn-primary btn-block">إضافة المعاملة</button>
-                        <button type="button" id="cancelEditBtn" class="btn btn-secondary btn-block" style="display: none; margin-top: 0.5rem;">إلغاء التعديل</button>
+                        <button type="submit" id="submitBtn" class="btn btn-primary btn-block" data-i18n="submitAdd">إضافة المعاملة</button>
+                        <button type="button" id="cancelEditBtn" class="btn btn-secondary btn-block" style="display: none; margin-top: 0.5rem;" data-i18n="cancelEdit">إلغاء التعديل</button>
                     </form>
                 </div>
 
                 <!-- Simple Statistics Panel -->
                 <div class="glass-card stats-card">
                     <div class="card-header">
-                        <h2><i class="fa-solid fa-chart-simple"></i> إحصائيات سريعة</h2>
+                        <h2><i class="fa-solid fa-chart-simple"></i> <span data-i18n="quickStats">إحصائيات سريعة</span></h2>
                     </div>
                     <div class="stats-content">
                         <div class="top-spending-widget">
-                            <span>أكثر فئة صرفاً هذا الشهر:</span>
+                            <span data-i18n="topSpending">أكثر فئة صرفاً هذا الشهر:</span>
                             <div class="top-category-badge" id="topCategoryDisplay">
                                 <span class="badge-icon"><i class="fa-solid fa-question"></i></span>
-                                <span class="badge-name">لا يوجد بيانات</span>
+                                <span class="badge-name" data-i18n="noData">لا يوجد بيانات</span>
                                 <span class="badge-amount">0.00 د.أ</span>
                             </div>
                         </div>
                         <div class="stat-row">
-                            <span class="stat-label">مقارنة بميزانية الشهر:</span>
+                            <span class="stat-label" data-i18n="budgetComparison">مقارنة بميزانية الشهر:</span>
                             <span class="stat-val" id="budgetUsageLabel">0% مستخدم</span>
                         </div>
                         <div class="stat-row">
-                            <span class="stat-label">المتوسط اليومي للصرف:</span>
+                            <span class="stat-label" data-i18n="dailyAverage">المتوسط اليومي للصرف:</span>
                             <span class="stat-val" id="dailyAverageDisplay">0.00 د.أ / يوم</span>
                         </div>
                     </div>
@@ -207,13 +208,13 @@
                 <!-- Visual Chart -->
                 <div class="glass-card chart-card">
                     <div class="card-header">
-                        <h2><i class="fa-solid fa-chart-pie"></i> توزيع المصاريف للشهر الحالي</h2>
+                        <h2><i class="fa-solid fa-chart-pie"></i> <span data-i18n="chartTitle">توزيع المصاريف للشهر الحالي</span></h2>
                     </div>
                     <div class="chart-container">
                         <canvas id="expenseChart"></canvas>
                         <div id="chartPlaceholder" class="chart-placeholder">
                             <i class="fa-solid fa-chart-pie"></i>
-                            <p>أضف مصاريف هذا الشهر لعرض الرسم البياني التوضيحي</p>
+                            <p data-i18n="chartPlaceholder">أضف مصاريف هذا الشهر لعرض الرسم البياني التوضيحي</p>
                         </div>
                     </div>
                 </div>
@@ -221,20 +222,20 @@
                 <!-- Transaction History -->
                 <div class="glass-card history-card">
                     <div class="card-header">
-                        <h2><i class="fa-solid fa-history"></i> سجل المعاملات</h2>
+                        <h2><i class="fa-solid fa-history"></i> <span data-i18n="historyHeader">سجل المعاملات</span></h2>
                         <div class="history-filters">
                             <select id="filterCategory">
-                                <option value="all">كل التصنيفات</option>
-                                <option value="أكل">أكل</option>
-                                <option value="مواصلات">مواصلات</option>
-                                <option value="تسوق">تسوق</option>
-                                <option value="دراسة">دراسة</option>
-                                <option value="غيره">غيره</option>
+                                <option value="all" data-i18n="allCategories">كل التصنيفات</option>
+                                <option value="أكل" data-i18n="catFood">أكل</option>
+                                <option value="مواصلات" data-i18n="catTransport">مواصلات</option>
+                                <option value="تسوق" data-i18n="catShopping">تسوق</option>
+                                <option value="دراسة" data-i18n="catEducation">دراسة</option>
+                                <option value="غيره" data-i18n="catOthers">غيره</option>
                             </select>
                             <select id="filterType">
-                                <option value="all">كل المعاملات</option>
-                                <option value="expense">مصاريف</option>
-                                <option value="income">دخل</option>
+                                <option value="all" data-i18n="allTransactions">كل المعاملات</option>
+                                <option value="expense" data-i18n="expense">مصاريف</option>
+                                <option value="income" data-i18n="income">دخل</option>
                             </select>
                         </div>
                     </div>
@@ -244,7 +245,7 @@
                         </ul>
                         <div id="noTransactions" class="empty-state">
                             <i class="fa-solid fa-receipt"></i>
-                            <p>لا يوجد أي معاملات مسجلة بعد. ابدأ بإضافة مصروف أو دخل!</p>
+                            <p data-i18n="emptyState">لا يوجد أي معاملات مسجلة بعد. ابدأ بإضافة مصروف أو دخل!</p>
                         </div>
                     </div>
                 </div>
@@ -255,17 +256,20 @@
         <footer class="app-footer">
             <div class="data-actions">
                 <button id="exportDataBtn" class="btn btn-secondary btn-sm">
-                    <i class="fa-solid fa-file-export"></i> تصدير البيانات (JSON)
+                    <i class="fa-solid fa-file-export"></i> <span data-i18n="exportJson">تصدير البيانات (JSON)</span>
+                </button>
+                <button id="exportPdfBtn" class="btn btn-secondary btn-sm">
+                    <i class="fa-solid fa-file-pdf"></i> <span data-i18n="exportPdf">تصدير كـ PDF (طباعة)</span>
                 </button>
                 <label for="importFileInput" class="btn btn-secondary btn-sm custom-file-upload">
-                    <i class="fa-solid fa-file-import"></i> استيراد البيانات
+                    <i class="fa-solid fa-file-import"></i> <span data-i18n="importData">استيراد البيانات</span>
                 </label>
                 <input type="file" id="importFileInput" accept=".json" style="display: none;">
                 <button id="clearDataBtn" class="btn btn-danger btn-sm">
-                    <i class="fa-solid fa-trash-can"></i> مسح البيانات
+                    <i class="fa-solid fa-trash-can"></i> <span data-i18n="clearData">مسح البيانات</span>
                 </button>
             </div>
-            <p class="copyright">محفظتي &copy; 2026 - إدارة الأموال بكل سهولة وذكاء</p>
+            <p class="copyright" data-i18n="copyright">محفظتي &copy; 2026 - إدارة الأموال بكل سهولة وذكاء</p>
         </footer>
     </div>
 
